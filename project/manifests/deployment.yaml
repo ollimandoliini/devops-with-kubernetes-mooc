@@ -14,10 +14,13 @@ spec:
     spec:
       containers:
       - name: project
-        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v0.2
+        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v0.3
+        ports:
+          - containerPort: 3000
+        env:
+          - name: PORT
+            value: "3000"
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
-        ports:
-        - containerPort: 8080
