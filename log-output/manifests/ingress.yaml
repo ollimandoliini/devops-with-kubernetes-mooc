@@ -1,17 +1,34 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-prefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /pingpong
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: log-output-ingress
-  labels:
-    name: log-output-ingress
+  name: shared-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: default-strip-prefix@kubernetescrd
 spec:
   rules:
-   - http:
+  - http:
       paths:
-      - pathType: Prefix
-        path: "/"
+      - path: /pingpong
+        pathType: Prefix
+        backend:
+          service:
+            name: ping-pong-application-svc
+            port:
+              number: 2345
+      - path: /
+        pathType: Prefix
         backend:
           service:
             name: log-output-svc
-            port: 
+            port:
               number: 2345
