@@ -11,9 +11,16 @@ spec:
       labels:
         app: ping-pong-application
     spec:
+      volumes:
+        - name: shared-volume
+          persistentVolumeClaim:
+            claimName: shared-pvc
       containers:
       - name: ping-pong-application
-        image: ollikortelahti/devops-with-kubernetes:ping-pong-application2
+        image: ollikortelahti/devops-with-kubernetes:ping-pong-application3
+        volumeMounts:
+          - name: shared-volume
+            mountPath: /app/files/
         resources:
           limits:
             memory: "128Mi"

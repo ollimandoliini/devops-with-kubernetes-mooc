@@ -12,14 +12,23 @@ spec:
       labels:
         app: project
     spec:
+      volumes:
+        - name: image-volume
+          persistentVolumeClaim:
+            claimName: image-pvc
       containers:
       - name: project
-        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v0.3
+        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v0.6-3
+        volumeMounts:
+        - name: image-volume
+          mountPath: /app/files
         ports:
           - containerPort: 3000
         env:
           - name: PORT
             value: "3000"
+          - name: FILEPATH
+            value: "/app/files"
         resources:
           limits:
             memory: "128Mi"

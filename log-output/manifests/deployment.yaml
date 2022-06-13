@@ -12,22 +12,23 @@ spec:
         app: log-output
     spec:
       volumes:
-        - name: files
-          emptyDir: {}
+        - name: shared-volume
+          persistentVolumeClaim:
+            claimName: shared-pvc
       containers:
         - name: log-output-writer
           image: ollikortelahti/devops-with-kubernetes:log-output-writer
           volumeMounts:
-          - name: files
+          - name: shared-volume
             mountPath: /app/files
           resources:
             limits:
               memory: "128Mi"
               cpu: "500m"
         - name: log-output-reader
-          image: ollikortelahti/devops-with-kubernetes:log-output-reader
+          image: ollikortelahti/devops-with-kubernetes:log-output-reader2
           volumeMounts:
-          - name: files
+          - name: shared-volume
             mountPath: /app/files
           resources:
             limits:
