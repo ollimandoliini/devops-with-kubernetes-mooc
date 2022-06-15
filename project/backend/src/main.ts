@@ -2,13 +2,17 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { createWriteStream, existsSync, fstat } from "fs";
 import { writeFile } from "fs/promises";
-import { resolve } from "path";
+import { resolve, join } from "path";
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT;
 const rootPath = process.env.FILEPATH || ".";
+
+app.use(express.static(join(__dirname, "..", "..", "frontend", "build")));
+app.use(express.static(join(__dirname, "..", "..", "frontend", "public")));
+
 
 app.get("/image", async (req: Request, resp: Response) => {
   const imageFileName = new Date().toISOString().split("T")[0];
@@ -28,8 +32,7 @@ app.get("/image", async (req: Request, resp: Response) => {
 });
 
 app.get("/", (req: Request, resp: Response) => {
-  resp.type("html");
-  resp.send('<html><body>Moro <img src="/image"> </body></html>');
+  resp.sendFile(join(__dirname, "..", "..", "frontend", "build", "index.html"));
 });
 
 app.listen(port, () => {
