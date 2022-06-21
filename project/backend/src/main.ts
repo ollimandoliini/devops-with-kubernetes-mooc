@@ -1,20 +1,20 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import { createWriteStream, existsSync, fstat } from "fs";
+import { existsSync } from "fs";
 import { writeFile } from "fs/promises";
-import { resolve, join } from "path";
+import { resolve } from "path";
+import bodyParser from "body-parser";
+import { v4 as uuid4 } from "uuid";
 
 dotenv.config();
 
 const app = express();
+app.use(bodyParser.json());
+
 const port = process.env.PORT;
 const rootPath = process.env.FILEPATH || ".";
 
-app.use(express.static(join(__dirname, "..", "..", "frontend", "build")));
-app.use(express.static(join(__dirname, "..", "..", "frontend", "public")));
-
-
-app.get("/image", async (req: Request, resp: Response) => {
+app.get("/api/image", async (req: Request, resp: Response) => {
   const imageFileName = new Date().toISOString().split("T")[0];
   const filePath = resolve(`${rootPath}/${imageFileName}.jpg`);
   resp.type("jpeg");
@@ -31,9 +31,30 @@ app.get("/image", async (req: Request, resp: Response) => {
   }
 });
 
-app.get("/", (req: Request, resp: Response) => {
-  resp.sendFile(join(__dirname, "..", "..", "frontend", "build", "index.html"));
+type Todo = {
+  id: string;
+  name: string;
+};
+
+let todos: Todo[] = [];
+
+app.get("/api/todos", (req: Request, resp: Response<Todo[]>) => {
+  console.log(todos);
+  resp.send(todos);
 });
+
+type TodoPayload = {
+  name: string;
+};
+
+app.post(
+  "/api/todos",
+  (req: Request<{}, {}, TodoPayload>, resp: Response<string>) => {
+    const id = uuid4();
+    todos = [...todos, { id, ...req.body }];
+    resp.send(id);
+  }
+);
 
 app.listen(port, () => {
   console.log(`Server started in project ${port}`);

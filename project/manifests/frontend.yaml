@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project-frontend
+  template:
+    metadata:
+      labels:
+        app: project-frontend
+    spec:
+      containers:
+      - name: project-frontend
+        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v1.0-frontend-4
+        ports:
+          - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: project-frontend-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: project-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

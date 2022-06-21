@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: project
+  name: project-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: project
+      app: project-backend
   template:
     metadata:
       labels:
-        app: project
+        app: project-backend
     spec:
       volumes:
         - name: image-volume
           persistentVolumeClaim:
             claimName: image-pvc
       containers:
-      - name: project
-        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v0.7-1
+      - name: project-backend
+        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v1.0-backend-4
         volumeMounts:
         - name: image-volume
           mountPath: /app/files
@@ -33,3 +33,16 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: project-backend-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: project-backend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
