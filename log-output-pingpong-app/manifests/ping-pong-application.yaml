@@ -11,16 +11,9 @@ spec:
       labels:
         app: ping-pong-application
     spec:
-      volumes:
-        - name: shared-volume
-          persistentVolumeClaim:
-            claimName: shared-pvc
       containers:
       - name: ping-pong-application
-        image: ollikortelahti/devops-with-kubernetes:ping-pong-application3
-        volumeMounts:
-          - name: shared-volume
-            mountPath: /app/files/
+        image: ollikortelahti/devops-with-kubernetes:ping-pong-application5
         resources:
           limits:
             memory: "128Mi"
@@ -30,3 +23,15 @@ spec:
             value: "3000"
         ports:
         - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ping-pong-application-svc
+spec:
+  selector:
+    app: ping-pong-application
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000

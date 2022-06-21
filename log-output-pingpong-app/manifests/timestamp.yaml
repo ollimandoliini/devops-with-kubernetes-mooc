@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timestamp
+spec:
+  selector:
+    matchLabels:
+      app: timestamp
+  template:
+    metadata:
+      labels:
+        app: timestamp
+    spec:
+      containers:
+        - name: timestamp
+          image: ollikortelahti/devops-with-kubernetes:timestamp-1
+          env:
+            - name: PORT
+              value: "3000"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timestamp-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: timestamp
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
