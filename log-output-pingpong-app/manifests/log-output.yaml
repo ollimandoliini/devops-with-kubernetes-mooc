@@ -14,10 +14,15 @@ spec:
     spec:
       containers:
         - name: log-output-writer
-          image: ollikortelahti/devops-with-kubernetes:log-output-app-4
+          image: ollikortelahti/devops-with-kubernetes:log-output-app-5
           env:
             - name: PORT
               value: "3000"
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: envs
+                  key: message
           resources:
             limits:
               memory: "128Mi"

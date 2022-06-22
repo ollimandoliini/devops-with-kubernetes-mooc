@@ -5,6 +5,7 @@ const id = uuidv4();
 
 const app = express();
 const port = process.env.PORT;
+const message = process.env.MESSAGE;
 
 app.get("/", async (req: Request, resp: Response) => {
   try {
@@ -15,8 +16,9 @@ app.get("/", async (req: Request, resp: Response) => {
       (response) => response.text()
     );
     resp.send(
-      `${timestamp}: ${id}
-     Ping / Pongs: ${count}`
+      `${message}\n
+       ${timestamp}: ${id}\n
+       Ping / Pongs: ${count}`
     );
   } catch (e) {
     console.log(e);

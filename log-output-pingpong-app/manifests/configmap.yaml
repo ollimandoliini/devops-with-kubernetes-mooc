@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envs
+  namespace: ping-pong-log-output-application
+data:
+  message: Hello
