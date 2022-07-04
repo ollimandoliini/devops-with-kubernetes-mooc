@@ -1,19 +1,23 @@
 import express, { Request, Response } from "express";
 import morgan from "morgan";
+import pool from "./database.js";
 
-const app = express();
 const port = process.env.PORT || 3000;
-
-let count = 0;
+const app = express();
 
 app.use(morgan("combined"));
 
-app.get("/", (req: Request, resp: Response) => {
+
+app.get("/", async (req: Request, resp: Response) => {
+  await pool.query("INSERT INTO count DEFAULT VALUES");
+  const result = await pool.query("SELECT count(*) FROM count");
+  const count = result.rows[0].count
   resp.send(`pong ${count}`);
-  count = count + 1;
 });
 
-app.get("/count", (req: Request, resp: Response) => {
+app.get("/count", async (req: Request, resp: Response) => {
+  const result = await pool.query("SELECT count(*) FROM count");
+  const count = result.rows[0].count
   resp.send(String(count));
 });
 

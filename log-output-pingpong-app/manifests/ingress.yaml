@@ -15,7 +15,7 @@ metadata:
   namespace: ping-pong-log-output-application
   annotations:
     kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/router.middlewares: default-strip-prefix@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: ping-pong-log-output-application-strip-prefix@kubernetescrd
 spec:
   rules:
   - http:
