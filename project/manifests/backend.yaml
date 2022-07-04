@@ -19,7 +19,7 @@ spec:
             claimName: image-pvc
       containers:
       - name: project-backend
-        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v1.0-backend-4
+        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v1.2-backend-2
         volumeMounts:
         - name: image-volume
           mountPath: /app/files
@@ -30,6 +30,12 @@ spec:
             value: "3000"
           - name: FILEPATH
             value: "/app/files"
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: postgres-data
+                key: dbUrl
+                optional: false
         resources:
           limits:
             memory: "128Mi"

@@ -4,11 +4,13 @@ import { existsSync } from "fs";
 import { writeFile } from "fs/promises";
 import { resolve } from "path";
 import bodyParser from "body-parser";
-import { v4 as uuid4 } from "uuid";
+import { PrismaClient, Todo } from "@prisma/client";
 
 dotenv.config();
 
 const app = express();
+const prisma = new PrismaClient();
+
 app.use(bodyParser.json());
 
 const port = process.env.PORT;
@@ -31,15 +33,8 @@ app.get("/api/image", async (req: Request, resp: Response) => {
   }
 });
 
-type Todo = {
-  id: string;
-  name: string;
-};
-
-let todos: Todo[] = [];
-
-app.get("/api/todos", (req: Request, resp: Response<Todo[]>) => {
-  console.log(todos);
+app.get("/api/todos", async (req: Request, resp: Response<Todo[]>) => {
+  const todos = await prisma.todo.findMany();
   resp.send(todos);
 });
 
@@ -49,13 +44,20 @@ type TodoPayload = {
 
 app.post(
   "/api/todos",
-  (req: Request<{}, {}, TodoPayload>, resp: Response<string>) => {
-    const id = uuid4();
-    todos = [...todos, { id, ...req.body }];
-    resp.send(id);
+  async (req: Request<{}, {}, TodoPayload>, resp: Response<Todo>) => {
+    const todo = await prisma.todo.create({ data: req.body });
+    resp.send(todo);
   }
 );
 
-app.listen(port, () => {
-  console.log(`Server started in project ${port}`);
-});
+const main = async () => {
+  try {
+    app.listen(port, () => {
+      console.log(`Server started in project ${port}`);
+    });
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+main();
