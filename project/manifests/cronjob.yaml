@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: add-todo
+  namespace: project
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: add-todo
+            image: docker.io/ollikortelahti/devops-with-kubernetes:project-v1.2-backend-5
+            command: ["node", "/app/build/job.js"]
+          restartPolicy: OnFailure

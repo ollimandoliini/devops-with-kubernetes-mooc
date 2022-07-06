@@ -19,15 +19,15 @@ spec:
             claimName: image-pvc
       containers:
       - name: project-backend
-        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v1.2-backend-2
+        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v1.2-backend-5
         volumeMounts:
         - name: image-volume
           mountPath: /app/files
         ports:
-          - containerPort: 3000
+          - containerPort: 80
         env:
           - name: PORT
-            value: "3000"
+            value: "80"
           - name: FILEPATH
             value: "/app/files"
           - name: DATABASE_URL
@@ -52,5 +52,5 @@ spec:
     app: project-backend
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 80
+      targetPort: 80
