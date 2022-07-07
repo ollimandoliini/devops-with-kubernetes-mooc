@@ -19,7 +19,7 @@ spec:
             claimName: image-pvc
       containers:
       - name: project-backend
-        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v1.2-backend-5
+        image: docker.io/ollikortelahti/devops-with-kubernetes:project-v2.10-backend-1
         volumeMounts:
         - name: image-volume
           mountPath: /app/files
