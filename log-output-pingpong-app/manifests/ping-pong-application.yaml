@@ -45,6 +45,7 @@ metadata:
   name: ping-pong-application-svc
   namespace: ping-pong-log-output-application
 spec:
+  type: LoadBalancer
   selector:
     app: ping-pong-application
   ports:
