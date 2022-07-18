@@ -21,7 +21,7 @@ spec:
           resources:
             limits:
               memory: "128Mi"
-              cpu: "500m"
+              cpu: "100m"
 ---
 apiVersion: v1
 kind: Service
@@ -29,7 +29,7 @@ metadata:
   name: timestamp-svc
   namespace: ping-pong-log-output-application
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: timestamp
   ports:

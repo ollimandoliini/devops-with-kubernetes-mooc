@@ -7,17 +7,20 @@ const app = express();
 
 app.use(morgan("combined"));
 
+app.get("/", (req: Request, resp: Response) => {
+  resp.send();
+});
 
-app.get("/", async (req: Request, resp: Response) => {
+app.get("/pingpong", async (req: Request, resp: Response) => {
   await pool.query("INSERT INTO count DEFAULT VALUES");
   const result = await pool.query("SELECT count(*) FROM count");
-  const count = result.rows[0].count
+  const count = result.rows[0].count;
   resp.send(`pong ${count}`);
 });
 
-app.get("/count", async (req: Request, resp: Response) => {
+app.get("/pingpong/count", async (req: Request, resp: Response) => {
   const result = await pool.query("SELECT count(*) FROM count");
-  const count = result.rows[0].count
+  const count = result.rows[0].count;
   resp.send(String(count));
 });
 

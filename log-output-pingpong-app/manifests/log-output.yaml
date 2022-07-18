@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: log-output-writer
-          image: ollikortelahti/devops-with-kubernetes:log-output-app-5
+          image: ollikortelahti/devops-with-kubernetes:log-output-app-8
           env:
             - name: PORT
               value: "3000"
@@ -26,7 +26,7 @@ spec:
           resources:
             limits:
               memory: "128Mi"
-              cpu: "500m"
+              cpu: "100m"
 ---
 apiVersion: v1
 kind: Service
@@ -34,7 +34,7 @@ metadata:
   name: log-output-svc
   namespace: ping-pong-log-output-application
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: log-output
   ports:

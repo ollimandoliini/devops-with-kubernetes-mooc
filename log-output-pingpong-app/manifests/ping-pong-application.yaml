@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
       - name: ping-pong-application
-        image: ollikortelahti/devops-with-kubernetes:ping-pong-application8
+        image: ollikortelahti/devops-with-kubernetes:ping-pong-application10
         resources:
           limits:
             memory: "128Mi"
-            cpu: "500m"
+            cpu: "100m"
         env:
           - name: PORT
             value: "3000"
@@ -45,7 +45,7 @@ metadata:
   name: ping-pong-application-svc
   namespace: ping-pong-log-output-application
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: ping-pong-application
   ports:
